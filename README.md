@@ -1,5 +1,7 @@
 Gomoku
 =======
+
+
 **Assignment 1 - Programming Intergration Project for Artificial Intelligence**  
 **Quach Minh Tuan**    
 **Vo Van Tien Dung**    
