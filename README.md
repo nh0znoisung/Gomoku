@@ -1,4 +1,4 @@
-Gomoku
+Gomoku game with Adversarial searching
 =======
 
 
@@ -7,8 +7,6 @@ Gomoku
 **Vo Van Tien Dung**    
 **Tran Ngoc Anh Quan**     
 **Hoang Vu**    
-
-Gomoku game in Python for Programming Intergration Project for Artificial Intelligence class.
 
 ## Usage
 Clone our source code
