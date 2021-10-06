@@ -1,4 +1,5 @@
 import math
+from copy import deepcopy
 #from main import *    #this is just for writing solve separately, delete when merging main and solver
 from queue import LifoQueue
 
@@ -9,23 +10,20 @@ turn = 1
 
 class State:
     def __init__(self, board, player, depth):
-        self.board = board.copy()
+        self.board = deepcopy(board)
         self.player = player    #The player that makes the next move. 1 is player1, -1 is player2
         self.depth = depth
 
         self.score = self.calScore()
         self.bestMove = ()
 
-    def __eq__(self, other):
-        return self.board == other.board
-
     def calScore(self):
         '''Calculate the point value for the current state'''
         winList = check_win(self.board)
         if len(winList) > 0:
             # just to make sure the player just made the move is the winning one
-            assert winList[0] == -self.player
-            winPlayer = winList[0]
+            winPlayer = self.board[winList[0][0]][winList[0][1]]
+            assert winPlayer == -self.player
             if (winPlayer == 1):
                 return 100
             elif (winPlayer == -1):
@@ -133,15 +131,15 @@ def is_full(curr_board):  # check draw or not
     return True
 
 def isTerminated(state):
-    return len(check_win(state.board)) > 0 or is_full(state.board())
+    return len(check_win(state.board)) > 0 or is_full(state.board)
 
 def makeMove(oldState, move):
     '''Transition between 2 states'''
     #The new board after the player make a move
-    newBoard = oldState.board.copy()
+    newBoard = deepcopy(oldState.board)
     newBoard[move[0]][move[1]] = oldState.player
     player = -oldState.player   #switch player
-    return State(board, player, oldState.depth + 1)
+    return State(newBoard, player, oldState.depth + 1)
 
 
 def getPossibleMoves(currentBoard):
@@ -166,7 +164,11 @@ def minimaxCore(state, maxDepth):
 
     possibleMoves = getPossibleMoves(state.board)
     for move in possibleMoves:
+        #print("MOVE: " + str(move))
         newState = makeMove(state, move)
+        #if (move == (1,1)):
+        #    print(newState.board)
+
         result = minimaxCore(newState, maxDepth)
 
         if result == None:
@@ -185,7 +187,6 @@ def minimaxCore(state, maxDepth):
     return state
 
 
-
 def minimaxSearch(maxDepth):
     '''Return the best move using minimax algorithm
     We assume that player with code 1 is the maximizing player
@@ -200,5 +201,6 @@ def minimaxSearch(maxDepth):
         return None
 
 if __name__ == "__main__":
-    print(board)
+    #print(board)
+    print(minimaxSearch(1))
 
