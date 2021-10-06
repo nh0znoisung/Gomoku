@@ -151,13 +151,13 @@ def draw_menu():
 		display_step_1()
 		display_step_2()
 
-def check_win():
+def check_win(curr_board):
 	for x in [-1, 1]:
 		# Horizontal with straight 5 points -> 1
 		for i in range(19):
 			cnt = 0
 			for j in range(19):
-				if board[i][j] == x:
+				if curr_board[i][j] == x:
 					cnt += 1
 					if cnt == 5:
 						return [(i,j-4), (i,j), 1, x]
@@ -168,7 +168,7 @@ def check_win():
 		for i in range(19):
 			cnt = 0
 			for j in range(19):
-				if board[j][i] == x:
+				if curr_board[j][i] == x:
 					cnt += 1
 					if cnt == 5:
 						return [(j-4,i), (j,i), 2, x]
@@ -178,7 +178,7 @@ def check_win():
 		# Diagonal top-left to bottom-right -> 3
 		cnt = 0
 		for i in range(19):
-			if board[i][i] == x:
+			if curr_board[i][i] == x:
 				cnt += 1
 				if cnt == 5:
 					return [(i-4,i-4), (i,i), 3, x]
@@ -188,7 +188,7 @@ def check_win():
 			# (i,0)
 			cnt = 0
 			for j in range(19-i):
-				if board[i+j][j] == x:
+				if curr_board[i+j][j] == x:
 					cnt += 1
 					if cnt == 5:
 						return [(i+j-4,j-4), (i+j,j), 3, x]
@@ -198,7 +198,7 @@ def check_win():
 			# (i,0)
 			cnt = 0
 			for j in range(19-i):
-				if board[18-(i+j)][18-j] == x:
+				if curr_board[18-(i+j)][18-j] == x:
 					cnt += 1
 					if cnt == 5:
 						return [(18-i-j,18-j), (18-(i+j)+4,18-j+4), 3, x]
@@ -208,7 +208,7 @@ def check_win():
 		# Diagonal top-right to bottom-left -> 4
 		cnt = 0
 		for i in range(19):
-			if board[18-i][i] == x:
+			if curr_board[18-i][i] == x:
 				cnt += 1
 				if cnt == 5:
 					return [(18-i,i), (18-i+4,i-4), 4, x]
@@ -218,7 +218,7 @@ def check_win():
 			# (i,0)
 			cnt = 0
 			for j in range(i+1):
-				if board[i-j][j] == x:
+				if curr_board[i-j][j] == x:
 					cnt += 1
 					if cnt == 5:
 						return [(i-j,j), (i-j+4,j-4), 4, x]
@@ -228,7 +228,7 @@ def check_win():
 			# (i,0)
 			cnt = 0
 			for j in range(i+1):
-				if board[18-(i-j)][18-j] == x:
+				if curr_board[18-(i-j)][18-j] == x:
 					cnt += 1
 					if cnt == 5:
 						return [(18-(i-j)-4,18-j+4), (18-(i-j),18-j), 4, x]
@@ -236,10 +236,10 @@ def check_win():
 					cnt = 0	
 	return []
 
-def is_full(): # check draw or not
+def is_full(curr_board): # check draw or not
 	for i in range(19):
 		for j in range(19):
-			if board[i][j] == 0:
+			if curr_board[i][j] == 0:
 				return False
 	return True
 
@@ -284,12 +284,12 @@ def mouse_click(x,y):
 	if board[int(y/30)][int(x/30)] == 0:
 		board[int(y/30)][int(x/30)] = turn
 		turn *= -1
-	l = check_win()
+	l = check_win(board)
 	if len(l) > 0:
 		win = 1
 		result = l
 		return
-	elif is_full() == True:
+	elif is_full(board) == True:
 		draw = 1
 
 
