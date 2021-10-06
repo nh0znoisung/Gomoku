@@ -1,5 +1,6 @@
 import pygame
 from pygame.locals import *
+from solver import *
 
 FPS = 90  # Frames per second
 WIDTH = 690
@@ -62,9 +63,6 @@ down_arrow_rect = Rect(210, 627, 15, 15)
 pick_rect = Rect(75, 650, 80, 32)
 restart_rect = Rect(390, 650, 84, 32)
 
-# Set board 19x19
-board = [[0 for j in range(19)] for i in range(19)] # 0 is empty, 1 is Player 1, -1 is Player 2
-turn = 1
 win = 0 # draw a line diagon or vertical or horizontal
 draw = 0 # draw match
 step = 1
@@ -150,98 +148,6 @@ def draw_menu():
 	if step == 2:
 		display_step_1()
 		display_step_2()
-
-def check_win(curr_board):
-	for x in [-1, 1]:
-		# Horizontal with straight 5 points -> 1
-		for i in range(19):
-			cnt = 0
-			for j in range(19):
-				if curr_board[i][j] == x:
-					cnt += 1
-					if cnt == 5:
-						return [(i,j-4), (i,j), 1, x]
-				else:
-					cnt = 0
-
-		# Vertical with straight 5 points -> 2
-		for i in range(19):
-			cnt = 0
-			for j in range(19):
-				if curr_board[j][i] == x:
-					cnt += 1
-					if cnt == 5:
-						return [(j-4,i), (j,i), 2, x]
-				else:
-					cnt = 0	
-
-		# Diagonal top-left to bottom-right -> 3
-		cnt = 0
-		for i in range(19):
-			if curr_board[i][i] == x:
-				cnt += 1
-				if cnt == 5:
-					return [(i-4,i-4), (i,i), 3, x]
-			else:
-				cnt = 0	
-		for i in range(1,19):
-			# (i,0)
-			cnt = 0
-			for j in range(19-i):
-				if curr_board[i+j][j] == x:
-					cnt += 1
-					if cnt == 5:
-						return [(i+j-4,j-4), (i+j,j), 3, x]
-				else:
-					cnt = 0	
-		for i in range(1,19):
-			# (i,0)
-			cnt = 0
-			for j in range(19-i):
-				if curr_board[18-(i+j)][18-j] == x:
-					cnt += 1
-					if cnt == 5:
-						return [(18-i-j,18-j), (18-(i+j)+4,18-j+4), 3, x]
-				else:
-					cnt = 0	
-		
-		# Diagonal top-right to bottom-left -> 4
-		cnt = 0
-		for i in range(19):
-			if curr_board[18-i][i] == x:
-				cnt += 1
-				if cnt == 5:
-					return [(18-i,i), (18-i+4,i-4), 4, x]
-			else:
-				cnt = 0	
-		for i in range(18):
-			# (i,0)
-			cnt = 0
-			for j in range(i+1):
-				if curr_board[i-j][j] == x:
-					cnt += 1
-					if cnt == 5:
-						return [(i-j,j), (i-j+4,j-4), 4, x]
-				else:
-					cnt = 0	
-		for i in range(18):
-			# (i,0)
-			cnt = 0
-			for j in range(i+1):
-				if curr_board[18-(i-j)][18-j] == x:
-					cnt += 1
-					if cnt == 5:
-						return [(18-(i-j)-4,18-j+4), (18-(i-j),18-j), 4, x]
-				else:
-					cnt = 0	
-	return []
-
-def is_full(curr_board): # check draw or not
-	for i in range(19):
-		for j in range(19):
-			if curr_board[i][j] == 0:
-				return False
-	return True
 
 def draw_line(l):
 	clock.tick(FPS)
