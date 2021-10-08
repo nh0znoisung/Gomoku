@@ -211,5 +211,6 @@ def minimaxSearch(maxDepth):
 
 if __name__ == "__main__":
     #print(board)
+
     print(minimaxSearch(1))
 

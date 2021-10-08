@@ -198,6 +198,20 @@ def mouse_click(x,y):
 	elif is_full(board) == True:
 		draw = 1
 
+def get_computer_move():
+	global board, turn, win, draw, result
+	(x,y) = minimaxSearch(1)
+	if board[x][y] == 0:
+		board[x][y] = turn
+		turn *= -1
+
+	l = check_win(board)
+	if len(l) > 0:
+		win = 1
+		result = l
+		return
+	elif is_full(board) == True:
+		draw = 1
 
 def reset_data():
 	global win, step, mode, result, board, turn, draw
@@ -229,10 +243,18 @@ def main():
 					if pick_rect.collidepoint(x,y):
 						step = 2
 				if step == 2: # Check mode 0,1,2
-					if restart_rect.collidepoint(x,y):
+					if restart_rect.collidepoint(x, y):
 						reset_data()
-					if win + draw == 0:
-						mouse_click(x,y)
+
+					if mode == 0:
+						if win + draw == 0:
+							mouse_click(x,y)
+					else:
+						if win + draw == 0:
+							mouse_click(x,y)
+						if win + draw == 0:
+							get_computer_move()
+
 
 		draw_board()
 		pygame.display.update()
