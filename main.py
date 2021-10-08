@@ -68,6 +68,7 @@ draw = 0 # draw match
 step = 1
 mode = 0
 result = []
+computerTurn = 0
 
 def display_up_arrow():
 	surface.blit(up_arrow, [210, 612])
@@ -214,7 +215,7 @@ def get_computer_move():
 		draw = 1
 
 def reset_data():
-	global win, step, mode, result, board, turn, draw
+	global win, step, mode, result, board, turn, draw, computerTurn
 	step = 1
 	mode = 0
 	result = []
@@ -222,16 +223,23 @@ def reset_data():
 	turn = 1
 	win = 0 
 	draw = 0 
+	computerTurn = 0
+
 
 
 def main():
-	global board, mode, step
+	global board, mode, step, computerTurn
 	while True:
 		clock.tick(FPS)
 		for event in pygame.event.get():
 			keys_pressed = pygame.key.get_pressed()
 			if event.type == pygame.QUIT or keys_pressed[pygame.K_q]:
 				pygame.quit()
+
+			if computerTurn == 1:
+				print("asdfasd")
+				get_computer_move()
+				computerTurn = 0
 
 			if event.type == pygame.MOUSEBUTTONDOWN:
 				x, y = event.pos
@@ -242,6 +250,9 @@ def main():
 						mode = (mode+2)%3
 					if pick_rect.collidepoint(x,y):
 						step = 2
+						if mode == 2:
+							computerTurn = 1
+						continue
 				if step == 2: # Check mode 0,1,2
 					if restart_rect.collidepoint(x, y):
 						reset_data()
@@ -249,13 +260,14 @@ def main():
 					if mode == 0:
 						if win + draw == 0:
 							mouse_click(x,y)
-					else:
+					elif mode == 1:
 						if win + draw == 0:
 							mouse_click(x,y)
+							computerTurn = 1
+					elif mode == 2:
 						if win + draw == 0:
-							get_computer_move()
-
-
+							mouse_click(x,y)
+							computerTurn = 1
 		draw_board()
 		pygame.display.update()
 	pygame.quit()
