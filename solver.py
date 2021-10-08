@@ -181,7 +181,7 @@ def minimaxCore(state, maxDepth, alpha, beta):
             #    print(result.score)
             #    print(result.score < state.score)
             if (result.score < state.score or len(state.bestMove) == 0):
-                print("MOVE: " + str(move))
+                #print("MOVE: " + str(move))
                 state.bestMove = move
                 state.score = result.score
                 if (result.score < beta):

@@ -239,13 +239,8 @@ def main():
 				pygame.quit()
 
 			if computerTurn == 1:
-<<<<<<< HEAD
 				if win + draw == 0:
 					get_computer_move()
-=======
-				#print("asdfasd")
-				get_computer_move()
->>>>>>> da7c9c604da0d7d832caab395924d2d4aab0a670
 				computerTurn = 0
 
 			if event.type == pygame.MOUSEBUTTONDOWN:
