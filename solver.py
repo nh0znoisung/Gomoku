@@ -151,7 +151,7 @@ def getPossibleMoves(currentBoard):
                 moves.append((i,j))
     return moves
 
-def minimaxCore(state, maxDepth):
+def minimaxCore(state, maxDepth, alpha, beta):
     '''The core logic of minimax algorithm
     Return the current state object, with the best possible move and score updated'''
 
@@ -169,7 +169,7 @@ def minimaxCore(state, maxDepth):
         #if (move == (1,1)):
         #    print(newState.board)
 
-        result = minimaxCore(newState, maxDepth)
+        result = minimaxCore(newState, maxDepth, alpha, beta)
 
         if result == None:
             continue
@@ -179,11 +179,20 @@ def minimaxCore(state, maxDepth):
             if (result.score > state.score):
                 state.bestMove = move
                 state.score = result.score
+                if (result.score > alpha):
+                    alpha = result.score
         elif state.player == -1:
             #Minimizing player
             if (result.score < state.score):
                 state.bestMove = move
                 state.score = result.score
+                if (result.score < beta):
+                    beta = result.score
+
+
+        if (alpha >= beta):
+            break
+
     return state
 
 
@@ -194,7 +203,7 @@ def minimaxSearch(maxDepth):
     '''
     global board, turn
     state = State(board, turn, 0)
-    bestState = minimaxCore(state, maxDepth)
+    bestState = minimaxCore(state, maxDepth, -math.inf, math.inf)
     if (bestState != None):
         return bestState.bestMove
     else:
