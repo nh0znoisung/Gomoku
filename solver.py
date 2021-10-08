@@ -17,6 +17,7 @@ class State:
         self.score = self.calScore()
         self.bestMove = ()
 
+
     def calScore(self):
         '''Calculate the point value for the current state'''
         winList = check_win(self.board)
@@ -31,11 +32,7 @@ class State:
             else:
                 return None
         else:
-            if self.player == 1:
-                #Since we are maximizing the value, the initial value has to be the lowest possible
-                return -math.inf
-            else:
-                return math.inf
+            return 0
 
 
 def check_win(curr_board):
@@ -164,11 +161,7 @@ def minimaxCore(state, maxDepth, alpha, beta):
 
     possibleMoves = getPossibleMoves(state.board)
     for move in possibleMoves:
-        #print("MOVE: " + str(move))
         newState = makeMove(state, move)
-        #if (move == (1,1)):
-        #    print(newState.board)
-
         result = minimaxCore(newState, maxDepth, alpha, beta)
 
         if result == None:
@@ -176,19 +169,23 @@ def minimaxCore(state, maxDepth, alpha, beta):
 
         if state.player == 1:
             #Maximizing player
-            if (result.score > state.score):
+            if (result.score > state.score or len(state.bestMove) == 0):
                 state.bestMove = move
                 state.score = result.score
                 if (result.score > alpha):
                     alpha = result.score
         elif state.player == -1:
             #Minimizing player
-            if (result.score < state.score):
+            #if (move == (0,4)):
+            #    print(state.score)
+            #    print(result.score)
+            #    print(result.score < state.score)
+            if (result.score < state.score or len(state.bestMove) == 0):
+                print("MOVE: " + str(move))
                 state.bestMove = move
                 state.score = result.score
                 if (result.score < beta):
                     beta = result.score
-
 
         if (alpha >= beta):
             break
@@ -196,13 +193,13 @@ def minimaxCore(state, maxDepth, alpha, beta):
     return state
 
 
-def minimaxSearch(maxDepth):
+def minimaxSearch(currentBoard, turn, maxDepth):
     '''Return the best move using minimax algorithm
     We assume that player with code 1 is the maximizing player
     and the -1 player is the minimizing one.
     '''
-    global board, turn
-    state = State(board, turn, 0)
+    #global board, turn
+    state = State(currentBoard, turn, 0)
     bestState = minimaxCore(state, maxDepth, -math.inf, math.inf)
     if (bestState != None):
         return bestState.bestMove
@@ -212,5 +209,5 @@ def minimaxSearch(maxDepth):
 if __name__ == "__main__":
     #print(board)
 
-    print(minimaxSearch(1))
+    print(minimaxSearch(board, turn, 1))
 

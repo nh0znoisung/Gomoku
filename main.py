@@ -203,7 +203,7 @@ def mouse_click(x,y):
 
 def get_computer_move():
 	global board, turn, win, draw, result
-	(x,y) = minimaxSearch(1)
+	(x,y) = minimaxSearch(board, turn, 1)
 	if board[x][y] == 0:
 		board[x][y] = turn
 		turn *= -1
@@ -239,8 +239,13 @@ def main():
 				pygame.quit()
 
 			if computerTurn == 1:
+<<<<<<< HEAD
 				if win + draw == 0:
 					get_computer_move()
+=======
+				#print("asdfasd")
+				get_computer_move()
+>>>>>>> da7c9c604da0d7d832caab395924d2d4aab0a670
 				computerTurn = 0
 
 			if event.type == pygame.MOUSEBUTTONDOWN:
