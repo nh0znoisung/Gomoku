@@ -196,13 +196,13 @@ def minimaxCore(state, maxDepth, alpha, beta):
     return state
 
 
-def minimaxSearch(maxDepth):
+def minimaxSearch(currentBoard, turn, maxDepth):
     '''Return the best move using minimax algorithm
     We assume that player with code 1 is the maximizing player
     and the -1 player is the minimizing one.
     '''
-    global board, turn
-    state = State(board, turn, 0)
+    #global board, turn
+    state = State(currentBoard, turn, 0)
     bestState = minimaxCore(state, maxDepth, -math.inf, math.inf)
     if (bestState != None):
         return bestState.bestMove
