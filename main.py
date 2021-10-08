@@ -187,17 +187,19 @@ def draw_board():
 def mouse_click(x,y):
 	global board, turn, win, draw, result
 	if y > 570:
-		return
+		return False
 	if board[int(y/30)][int(x/30)] == 0:
 		board[int(y/30)][int(x/30)] = turn
 		turn *= -1
-	l = check_win(board)
-	if len(l) > 0:
-		win = 1
-		result = l
-		return
-	elif is_full(board) == True:
-		draw = 1
+		l = check_win(board)
+		if len(l) > 0:
+			win = 1
+			result = l
+			return
+		elif is_full(board) == True:
+			draw = 1
+		return True
+	return False
 
 def get_computer_move():
 	global board, turn, win, draw, result
@@ -237,8 +239,8 @@ def main():
 				pygame.quit()
 
 			if computerTurn == 1:
-				print("asdfasd")
-				get_computer_move()
+				if win + draw == 0:
+					get_computer_move()
 				computerTurn = 0
 
 			if event.type == pygame.MOUSEBUTTONDOWN:
@@ -262,12 +264,12 @@ def main():
 							mouse_click(x,y)
 					elif mode == 1:
 						if win + draw == 0:
-							mouse_click(x,y)
-							computerTurn = 1
+							if mouse_click(x,y):
+								computerTurn = 1
 					elif mode == 2:
 						if win + draw == 0:
-							mouse_click(x,y)
-							computerTurn = 1
+							if mouse_click(x,y):
+								computerTurn = 1
 		draw_board()
 		pygame.display.update()
 	pygame.quit()
