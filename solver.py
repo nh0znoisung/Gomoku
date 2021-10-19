@@ -1,5 +1,6 @@
 import math
 from copy import deepcopy
+import random
 #from main import *    #this is just for writing solve separately, delete when merging main and solver
 from queue import LifoQueue
 
@@ -20,7 +21,7 @@ class State:
 
     def calScore(self):
         '''Calculate the point value for the current state'''
-        winList = check_win(self.board)
+        '''winList = check_win(self.board)
         if len(winList) > 0:
             # just to make sure the player just made the move is the winning one
             winPlayer = self.board[winList[0][0]][winList[0][1]]
@@ -32,7 +33,77 @@ class State:
             else:
                 return None
         else:
-            return 0
+            return 0'''
+
+        halfCoeff = [0, 0, 10, 200, 500, 6000]
+        openCoeff = [0, 0, 50, 500, 4800, 6000]
+        totalScore = 0
+
+        for i in range(len(self.board)):
+            for j in range(len(self.board)):
+                if (self.board[i][j] != 0):
+                    cur = self.board[i][j]
+                    #Unit vector for directions: Vertical, Horizontal and Diagonal
+                    directions = [(1, 0), (0, 1), (1, 1), (-1, 1)]
+                    visitedLines = []
+                    for vector in directions:
+                        lineLen = 1
+                        head = (i + vector[0], j + vector[1])
+                        tail = (i - vector[0], j - vector[1])
+                        headBlock = False
+                        taiBlock = False
+
+                        #Move the head in the direction of vector
+                        if (not self.isOutOfRange(head)):
+                            while (self.board[head[0]][head[1]] == cur):
+                                lineLen += 1
+                                head = (head[0] + vector[0], head[1] + vector[1])
+                                if (self.isOutOfRange(head)):
+                                    break
+
+                        if (self.isOutOfRange(head)):
+                            headBlock = True    #boundary block
+                        elif (self.board[head[0]][head[1]] == -cur):
+                            headBlock = True    #blocked by the other player
+
+                        #Do the same thing with the tail
+                        if (not self.isOutOfRange(tail)):
+                            while (self.board[tail[0]][tail[1]] == cur):
+                                lineLen += 1
+                                tail = (tail[0] - vector[0], tail[1] - vector[1])
+                                if (self.isOutOfRange(tail)):
+                                    break
+                        if (self.isOutOfRange(tail)):
+                            taiBlock = True
+                        elif (self.board[tail[0]][tail[1]] == -cur):
+                            taiBlock = True
+
+                        headTail = {head, tail}
+                        if headTail not in visitedLines:
+                            visitedLines.append(headTail)
+                            if (lineLen > 5):
+                                lineLen = 5
+
+
+                            if (lineLen == 5):
+                                totalScore += cur * openCoeff[lineLen]
+                            elif (headBlock and taiBlock):
+                                pass
+                            elif (headBlock or taiBlock):
+                                totalScore += cur * halfCoeff[lineLen]
+                            else:
+                                totalScore += cur * openCoeff[lineLen]
+
+        return totalScore
+
+
+
+    def isOutOfRange(self, cell):
+        (x,y) = cell
+        horizontal = (x < 0) or (x >= len(self.board))
+        vertical = (y < 0) or (y >= len(self.board))
+        return horizontal or vertical
+
 
 
 def check_win(curr_board):
@@ -160,6 +231,7 @@ def minimaxCore(state, maxDepth, alpha, beta):
         return state
 
     possibleMoves = getPossibleMoves(state.board)
+    random.shuffle(possibleMoves)   #include some randomness to the moves
     for move in possibleMoves:
         newState = makeMove(state, move)
         result = minimaxCore(newState, maxDepth, alpha, beta)
@@ -176,12 +248,7 @@ def minimaxCore(state, maxDepth, alpha, beta):
                     alpha = result.score
         elif state.player == -1:
             #Minimizing player
-            #if (move == (0,4)):
-            #    print(state.score)
-            #    print(result.score)
-            #    print(result.score < state.score)
             if (result.score < state.score or len(state.bestMove) == 0):
-                #print("MOVE: " + str(move))
                 state.bestMove = move
                 state.score = result.score
                 if (result.score < beta):
@@ -198,7 +265,6 @@ def minimaxSearch(currentBoard, turn, maxDepth):
     We assume that player with code 1 is the maximizing player
     and the -1 player is the minimizing one.
     '''
-    #global board, turn
     state = State(currentBoard, turn, 0)
     bestState = minimaxCore(state, maxDepth, -math.inf, math.inf)
     if (bestState != None):
