@@ -219,10 +219,18 @@ def getPossibleMoves(currentBoard):
     rightBound = 9
     topBound = 9
     downBound = 9
+
     for i in range(len(currentBoard)):
         for j in range(len(currentBoard[i])):
             if currentBoard[i][j] == 0:
                 moves.append((i,j))
+                #If there is already an occupied cells the bound will be relative to that cell.
+                if (len(moves) == 1):
+                    leftBound = j
+                    rightBound = j
+                    topBound = i
+                    downBound = i
+
             else:
                 if (j < leftBound):
                     leftBound = j
