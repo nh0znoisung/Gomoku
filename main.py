@@ -203,7 +203,7 @@ def mouse_click(x,y):
 
 def get_computer_move():
 	global board, turn, win, draw, result
-	(x,y) = minimaxSearch(board, turn, 1)
+	(x,y) = minimaxSearch(board, turn, 2)
 	if board[x][y] == 0:
 		board[x][y] = turn
 		turn *= -1

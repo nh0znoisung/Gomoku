@@ -213,10 +213,41 @@ def makeMove(oldState, move):
 def getPossibleMoves(currentBoard):
     '''get all the moves that a player can make in the current board'''
     moves = []
+    leftBound = 0
+    rightBound = 0
+    topBound = 0
+    downBound = 0
     for i in range(len(currentBoard)):
         for j in range(len(currentBoard[i])):
             if currentBoard[i][j] == 0:
                 moves.append((i,j))
+            else:
+                if (j < leftBound):
+                    leftBound = j
+                if (j > rightBound):
+                    rightBound = j
+                if (i < topBound):
+                    topBound = i
+                if (i > downBound):
+                    downBound = i
+
+    topBound -= 2
+    downBound += 2
+    rightBound += 2
+    leftBound -= 2
+
+    #Restrict the first move to be at the center of the board
+    if (len(moves) == len(board) * len(board[0])):
+        topBound += 6
+        downBound += 6
+        rightBound += 6
+        leftBound += 6
+
+    unfilteredMoves = moves.copy()
+    moves = [(i,j) for (i,j) in moves if leftBound <= j and j <= rightBound and topBound <= i and i <= downBound]
+    if (len(moves) == 0):
+        moves = unfilteredMoves
+
     return moves
 
 def minimaxCore(state, maxDepth, alpha, beta):
