@@ -21,22 +21,8 @@ class State:
 
     def calScore(self):
         '''Calculate the point value for the current state'''
-        '''winList = check_win(self.board)
-        if len(winList) > 0:
-            # just to make sure the player just made the move is the winning one
-            winPlayer = self.board[winList[0][0]][winList[0][1]]
-            assert winPlayer == -self.player
-            if (winPlayer == 1):
-                return 100
-            elif (winPlayer == -1):
-                return -100
-            else:
-                return None
-        else:
-            return 0'''
-
-        halfCoeff = [0, 0, 10, 200, 500, 6000]
-        openCoeff = [0, 0, 50, 500, 4800, 6000]
+        halfCoeff = [0, 0, 10, 200, 500, 20000]
+        openCoeff = [0, 0, 50, 500, 4800, 20000]
         totalScore = 0
 
         for i in range(len(self.board)):
