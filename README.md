@@ -11,18 +11,18 @@ Gomoku game with Adversarial searching
 ## Usage
 Clone our source code
 ```bash
-git clone https://github.com/nh0znoisung/gomoku.git
-cd gomoku
+$ git clone https://github.com/nh0znoisung/Gomoku.git
+$ cd gomoku
 ```
 
 Install Dependencies
 
 ```bash
-pip install -r requirements.txt
+$ pip install -r requirements.txt
 ```
 
 Run program
 
 ```bash
-python main.py
+$ python main.py
 ```
