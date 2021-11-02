@@ -12,7 +12,7 @@ Gomoku game with Adversarial searching
 Clone our source code
 ```bash
 $ git clone https://github.com/nh0znoisung/Gomoku.git
-$ cd gomoku
+$ cd Gomoku
 ```
 
 Install Dependencies
