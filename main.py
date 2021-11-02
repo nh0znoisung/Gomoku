@@ -1,4 +1,6 @@
 import pygame
+import os
+import time
 from pygame.locals import *
 from solver import *
 
@@ -69,6 +71,8 @@ step = 1
 mode = 0
 result = []
 computerTurn = 0
+count = 0
+t0 = 0
 
 def display_up_arrow():
 	surface.blit(up_arrow, [210, 612])
@@ -230,17 +234,25 @@ def reset_data():
 
 
 def main():
-	global board, mode, step, computerTurn
+	global board, mode, step, computerTurn, count, t0
+	file = open('result.txt', 'w')
 	while True:
 		clock.tick(FPS)
 		for event in pygame.event.get():
 			keys_pressed = pygame.key.get_pressed()
 			if event.type == pygame.QUIT or keys_pressed[pygame.K_q]:
+				file.write("Time sum: {0}".format(t0))
+				file.close()
 				pygame.quit()
 
 			if computerTurn == 1:
+				count += 1
 				if win + draw == 0:
+					t = time.time()
 					get_computer_move()
+					t = time.time() - t
+					t0 += t
+					file.write("Turn {0}: {1}s\n".format(count,t))
 				computerTurn = 0
 
 			if event.type == pygame.MOUSEBUTTONDOWN:
